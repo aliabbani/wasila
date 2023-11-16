@@ -67,10 +67,10 @@ const SignIn = () => {
         />
 
         <button
-          // disabled={loading}
+          disabled={loading}
           className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
         >
-          {/* {loading ? 'Loading...' : 'Sign In'} */} Sign In
+          {loading ? 'Loading...' : 'Sign In'} 
         </button>
         {/* <OAuth/> */}
       </form>
@@ -80,7 +80,7 @@ const SignIn = () => {
           <span className='text-blue-700'>Sign up</span>
         </Link>
       </div>
-      {/* {error && <p className='text-red-500 mt-5'>{error}</p>} */}
+      {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   );
 }

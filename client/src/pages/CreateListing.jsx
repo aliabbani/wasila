@@ -13,7 +13,7 @@ export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
-  console.log("createListing files: ", files)
+  console.log("createListing files: ", files);
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
@@ -28,7 +28,7 @@ export default function CreateListing() {
     parking: false,
     furnished: false,
   });
-  console.log("createListing formData: ", formData)
+  console.log("createListing formData: ", formData);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);

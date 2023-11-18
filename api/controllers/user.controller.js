@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import Listing from "../models/listing.model.js";
 
-// test it
+// **test it**
 export const test = (req, res) => {
   res.json({
     message: "Api route is working!",
@@ -40,7 +40,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-// delete one user
+// **delete one user**
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
     return next(errorHandler(401, "You can only delete your own account!"));

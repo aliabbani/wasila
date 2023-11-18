@@ -164,7 +164,6 @@ export default function Profile() {
   //   }
   // };
 
-  useEffect(() => {}, []);
   const handleShowListings = () => {
     console.log("handleShowListings");
   };

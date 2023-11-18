@@ -1,6 +1,14 @@
 import Listing from '../models/listing.model.js';
 import { errorHandler } from '../utils/error.js';
 
+// **test it**
+export const test = (req, res) => {
+  res.json({
+    message: "Listing route is working!",
+  });
+};
+
+// **create a new listing**
 export const createListing = async (req, res, next) => {
   try {
     const listing = await Listing.create(req.body);
@@ -10,6 +18,7 @@ export const createListing = async (req, res, next) => {
   }
 };
 
+// **delete one listing**
 export const deleteListing = async (req, res, next) => {
   const listing = await Listing.findById(req.params.id);
 
@@ -29,6 +38,7 @@ export const deleteListing = async (req, res, next) => {
   }
 };
 
+// **update one listing**
 export const updateListing = async (req, res, next) => {
   const listing = await Listing.findById(req.params.id);
   if (!listing) {
@@ -50,6 +60,7 @@ export const updateListing = async (req, res, next) => {
   }
 };
 
+// **get one listing**
 export const getListing = async (req, res, next) => {
   try {
     const listing = await Listing.findById(req.params.id);
@@ -62,6 +73,7 @@ export const getListing = async (req, res, next) => {
   }
 };
 
+// get all listings
 export const getListings = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;

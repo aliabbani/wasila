@@ -53,6 +53,7 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
+// **get specific user's listings**
 export const getUserListings = async (req, res, next) => {
   if (req.user.id === req.params.id) {
     try {

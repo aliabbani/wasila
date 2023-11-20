@@ -146,6 +146,7 @@ export default function CreateListing() {
         }),
       });
       const data = await res.json();
+      console.log("createListing handleSubmit data: ", data);
       setLoading(false);
       if (data.success === false) {
         setError(data.message);

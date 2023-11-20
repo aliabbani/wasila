@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
+  console.log("currentUser", currentUser);
   const [file, setFile] = useState(undefined);
   // console.log("file", file)
   const [filePerc, setFilePerc] = useState(0);
@@ -129,21 +130,21 @@ export default function Profile() {
     }
   };
 
-  // const handleShowListings = async () => {
-  //   try {
-  //     setShowListingsError(false);
-  //     const res = await fetch(`/api/user/listings/${currentUser._id}`);
-  //     const data = await res.json();
-  //     if (data.success === false) {
-  //       setShowListingsError(true);
-  //       return;
-  //     }
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
 
-  //     setUserListings(data);
-  //   } catch (error) {
-  //     setShowListingsError(true);
-  //   }
-  // };
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
 
   // const handleListingDelete = async (listingId) => {
   //   try {
@@ -164,9 +165,6 @@ export default function Profile() {
   //   }
   // };
 
-  const handleShowListings = () => {
-    console.log("handleShowListings");
-  };
   const handleListingDelete = () => {
     console.log("handleListingDelete");
   };

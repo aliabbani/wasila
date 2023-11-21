@@ -13,7 +13,6 @@ export default function Header() {
     e.preventDefault();
     // we use URLSearchParams to get the info from the url
     const urlParams = new URLSearchParams(window.location.search);
-    console.log("urlParams: ", urlParams);
     urlParams.set('searchTerm', searchTerm);
     // we want to convert the urlParams back to a string because some of them are numbers some are boolean
     const searchQuery = urlParams.toString();

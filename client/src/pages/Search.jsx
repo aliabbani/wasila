@@ -14,6 +14,8 @@ export default function Search() {
     order: 'desc',
   });
 
+  console.log("sidebardata: ", sidebardata)
+
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
   const [showMore, setShowMore] = useState(false);
@@ -262,4 +264,4 @@ export default function Search() {
       </div>
     </div>
   );
-}
+} 

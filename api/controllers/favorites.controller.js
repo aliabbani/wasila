@@ -1,4 +1,5 @@
 import Favorites from "../models/favorites.model.js";
+import Listing from "../models/listing.model.js";
 import { errorHandler } from "../utils/error.js";
 
 // **test it**
@@ -42,20 +43,29 @@ export const getFavorites = async (req, res, next) => {
   try {
     const favorites = await Favorites.find({ userId });
     console.log("favorites", favorites);
-    const listingIds = favorites.map(f => f.listingId);
+    const listingIds = favorites.map((f) => f.listingId);
     console.log("listingIds", listingIds);
     res.status(200).json({ listings: listingIds });
+    // res.status(200).json(favorites)
   } catch (error) {
     next(error);
   }
 };
 
-// app.get('/api/favorites/:userId', async (req, res) => {
-//   const { userId } = req.params;
+// get specific user's favorite listings
+export const getUserFavoriteListings = async (req, res, next) => {
+  const userId = req.params.userId;
 
-//   // Fetch favorite list for the user
-//   const favorites = await Favorite.find({ userId });
-//   const productIds = favorites.map(favorite => favorite.productId);
+  // Get all favorite listings for the user
+  try {
+    const favoriteListings = await Favorites.find({ userId });
+    const listingIds = favoriteListings.map((f) => f.listingId);
 
-//   res.status(200).json({ products: productIds });
-// });
+    // Fetch all listings based on favorite IDs
+    const listings = await Listing.find({ _id: { $in: listingIds } });
+
+    res.status(200).json( listings );
+  } catch (error) {
+    next(error);
+  }
+};

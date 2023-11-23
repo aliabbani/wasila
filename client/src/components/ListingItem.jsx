@@ -2,29 +2,40 @@ import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { GrFavorite } from "react-icons/gr";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  removeFavorite,
-  addFavorite,
-} from "../redux/favorite/favoriteSlice";
+import { useSelector } from "react-redux";
 
 export default function ListingItem({ listing }) {
-  // const [favorite, setFavorite] = useState(false);
-  const { favorite } = useSelector((state) => state.favorite);
-  const dispatch = useDispatch();
-  const handleFavoriteClick = () => {
-    // Check the current favorite state
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
+  const userId = currentUser?._id;
+  // console.log("currentUser", currentUser)
+  // console.log("userId", userId)
+  // console.log("listing", listing)
+  // console.log("isFavorite", isFavorite)
 
-    // Dispatch the appropriate action based on the current state
-    if (favorite) {
-      dispatch(removeFavorite());
+  const handleFavoriteClick = async () => {
+    const listingId = listing._id;
+    if (isFavorite) {
+      await fetch(`/api/favorites/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, listingId }),
+      });
+      setIsFavorite(false);
     } else {
-      dispatch(addFavorite());
+      await fetch(`/api/favorites/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, listingId }),
+      });
+      setIsFavorite(true);
     }
   };
 
-
-  console.log("favorite: ", favorite);
   return (
     <div className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]">
       <Link to={`/listing/${listing._id}`}>
@@ -44,12 +55,13 @@ export default function ListingItem({ listing }) {
               {listing.name}
             </p>
           </Link>
-          <div
-            
-          >
-            <GrFavorite onClick={() => handleFavoriteClick()}
-            className={`truncate text-lg font-semibold cursor-pointer ${favorite ? "text-red-500" : "text-slate-700 "}`}/>
-          </div>
+          <button onClick={handleFavoriteClick} type="button">
+            <GrFavorite
+              className={`truncate text-lg font-semibold cursor-pointer ${
+                isFavorite ? "text-red-500" : "text-slate-700 "
+              }`}
+            />
+          </button>
         </div>
         <Link to={`/listing/${listing._id}`}>
           <div className="flex items-center gap-1">

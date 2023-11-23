@@ -46,6 +46,11 @@ const listingSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    favorite: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     imageUrls: {
       type: Array,
       required: true,

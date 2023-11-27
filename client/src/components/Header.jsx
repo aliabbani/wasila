@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("searchTerm: ", searchTerm);
+  // console.log("searchTerm: ", searchTerm);
   const navigate = useNavigate();
   const location = useLocation();
 

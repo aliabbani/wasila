@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 export default function ListingItem({ listing, handleRemoveFavorite }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  console.log("isFavorite", isFavorite);
+  // console.log("isFavorite", isFavorite);
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
 

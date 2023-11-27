@@ -54,7 +54,7 @@ export default function ListingItem({ listing, handleRemoveFavorite }) {
     document.cookie = `favorites=${favorites.join(",")}; path=/`;
     setIsFavorite(!isFavorite);
 
-    // If handleRemoveFavorite is provided, call it to remove the listing immediately
+    // If handleRemoveFavorite is provided, call it to remove the listing immediately.
     if (handleRemoveFavorite) {
       handleRemoveFavorite(listingId);
     }

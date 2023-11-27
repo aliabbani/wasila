@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("searchTerm: ", searchTerm)
+  console.log("searchTerm: ", searchTerm);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // we use URLSearchParams to get the info from the url
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('searchTerm', searchTerm);
+    urlParams.set("searchTerm", searchTerm);
     // we want to convert the urlParams back to a string because some of them are numbers some are boolean
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
@@ -21,7 +21,7 @@ export default function Header() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm');
+    const searchTermFromUrl = urlParams.get("searchTerm");
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
     }
@@ -52,6 +52,11 @@ export default function Header() {
           </button>
         </form>
         <ul className="flex gap-4">
+          <Link to="/favorites">
+            <li className="hidden sm:inline text-slate-700 hover:underline">
+              Favorites
+            </li>
+          </Link>
           <Link to="/">
             <li className="hidden sm:inline text-slate-700 hover:underline">
               Home

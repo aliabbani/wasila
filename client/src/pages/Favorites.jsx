@@ -4,12 +4,9 @@ import ListingItem from "../components/ListingItem";
 
 const Favorites = ({ listing }) => {
   const [userFavoriteListings, setUserFavoriteListings] = useState([]);
-  console.log("userFavoriteListings", userFavoriteListings);
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
 
-  // http://localhost:3000/api/favorites/get/6558ba3ba9fb16fcd6867e06
-  // http://localhost:3000/api/favorites/655635652138388eac7f1a15
   const fetchFavorites = async () => {
     try {
       const res = await fetch(`/api/favorites/${userId}`);
@@ -19,6 +16,26 @@ const Favorites = ({ listing }) => {
       console.log(error);
     }
   };
+
+  const handleRemoveFavorite = async (listingId) => {
+    try {
+      await fetch(`/api/favorites/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, listingId }),
+      });
+
+      // Update local state to reflect the removed listing
+      setUserFavoriteListings((prevListings) =>
+        prevListings.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+    }
+  };
+
   useEffect(() => {
     fetchFavorites();
   }, []);
@@ -27,7 +44,11 @@ const Favorites = ({ listing }) => {
     <div>
       <div>Favorites</div>
       {userFavoriteListings.map((listing) => (
-        <ListingItem listing={listing} key={listing._id} />
+        <ListingItem 
+          key={listing._id}
+          listing={listing}
+          handleRemoveFavorite={handleRemoveFavorite}
+        />
       ))}
     </div>
   );

@@ -1,21 +1,38 @@
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
 import { GrFavorite } from "react-icons/gr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-export default function ListingItem({ listing }) {
+
+export default function ListingItem({ listing, handleRemoveFavorite }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  console.log("isFavorite", isFavorite)
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
-  // console.log("currentUser", currentUser)
-  // console.log("userId", userId)
-  // console.log("listing", listing)
-  // console.log("isFavorite", isFavorite)
+
+  useEffect(() => {
+    const favoritesCookie = document.cookie.split("; ").find((row) => row.startsWith("favorites="));
+    // console.log("favoritesCookie", favoritesCookie)
+    if (favoritesCookie) {
+      const favorites = favoritesCookie.split("=")[1].split(",");
+      // console.log("favorites in the useEffect", favorites)
+      setIsFavorite(favorites.includes(listing._id));
+    }
+  }, [listing._id]);
 
   const handleFavoriteClick = async () => {
     const listingId = listing._id;
+    const favoritesCookie = document.cookie.split("; ").find((row) => row.startsWith("favorites="));
+
+    let favorites = [];
+
+    if (favoritesCookie) {
+      favorites = favoritesCookie.split("=")[1].split(",");
+    }
+
     if (isFavorite) {
+      favorites = favorites.filter((id) => id !== listingId);
       await fetch(`/api/favorites/delete`, {
         method: "DELETE",
         headers: {
@@ -23,8 +40,8 @@ export default function ListingItem({ listing }) {
         },
         body: JSON.stringify({ userId, listingId }),
       });
-      setIsFavorite(false);
     } else {
+      favorites.push(listingId);
       await fetch(`/api/favorites/add`, {
         method: "POST",
         headers: {
@@ -32,7 +49,14 @@ export default function ListingItem({ listing }) {
         },
         body: JSON.stringify({ userId, listingId }),
       });
-      setIsFavorite(true);
+    }
+
+    document.cookie = `favorites=${favorites.join(",")}; path=/`;
+    setIsFavorite(!isFavorite);
+
+    // If handleRemoveFavorite is provided, call it to remove the listing immediately
+    if (handleRemoveFavorite) {
+      handleRemoveFavorite(listingId);
     }
   };
 

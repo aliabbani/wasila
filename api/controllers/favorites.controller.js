@@ -20,8 +20,9 @@ export const addFavorites = async (req, res, next) => {
   try {
     const newFavorite = new Favorites({ userId, listingId });
     await newFavorite.save();
-    res.status(200).json("Product added to favorites!");
+    res.status(200).json({ message: "Listing added to favorites", success: true });
   } catch (error) {
+    console.error("Error adding favorite:", error);
     next(error);
   }
 };
@@ -31,8 +32,9 @@ export const removeFavorites = async (req, res, next) => {
 
   try {
     await Favorites.findOneAndDelete({ userId, listingId });
-    res.status(200).json({ message: "Product removed from favorites" });
+    res.status(200).json({ message: "Listing removed from favorites", success: true });
   } catch (error) {
+    console.error("Error removing favorite:", error);
     next(error);
   }
 };

@@ -22,13 +22,12 @@ import { Link } from "react-router-dom";
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  console.log("currentUser", currentUser);
   const [file, setFile] = useState(undefined);
   // console.log("file", file)
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  console.log("formData in the profile page: ", formData);
+  // console.log("formData in the profile page: ", formData);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
@@ -86,7 +85,7 @@ export default function Profile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log("profile update handleSubmit data: ", data);
+      // console.log("profile update handleSubmit data: ", data);
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;

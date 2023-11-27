@@ -46,7 +46,7 @@ const Favorites = ({ listing }) => {
       <div>Favorites</div>
       {userFavoriteListings.map((listing) => (
         <ListingItem 
-          key={listing._id}
+          // key={listing._id}
           listing={listing}
           handleRemoveFavorite={handleRemoveFavorite}
         />

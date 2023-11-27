@@ -1,13 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/userSlice';
-import favoriteReducer from './favorite/favoriteSlice';
-// We use redux presist whcihc help us add the user data in the local storage
+// We use redux presist which help us add the user data in the local storage
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({ 
   user: userReducer, 
-  favorite: favoriteReducer
 });
 
 // setting the name of the key on the local storage

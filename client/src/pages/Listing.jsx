@@ -14,20 +14,22 @@ import {
   FaShare,
 } from 'react-icons/fa';
 import Contact from '../components/Contact';
+import { GrFavorite } from "react-icons/gr";
 
 // https://sabe.io/blog/javascript-format-numbers-commas#:~:text=The%20best%20way%20to%20format,format%20the%20number%20with%20commas.
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
-  console.log("listing: ", listing);
+  // console.log("listing: ", listing);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [contact, setContact] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
-  console.log("currentUser: ", currentUser);
+  const userId = currentUser?._id;
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -43,6 +45,8 @@ export default function Listing() {
         setListing(data);
         setLoading(false);
         setError(false);
+         // Check if the listing is in favorites when the data is loaded
+         checkIsFavorite(data._id);
       } catch (error) {
         setError(true);
         setLoading(false);
@@ -50,6 +54,53 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
+
+  const checkIsFavorite = (listingId) => {
+    const favoritesCookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('favorites='));
+    if (favoritesCookie) {
+      const favorites = favoritesCookie.split('=')[1].split(',');
+      setIsFavorite(favorites.includes(listingId));
+    }
+  };
+
+  const handleFavoriteClick = async () => {
+    const listingId = listing._id;
+    const favoritesCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("favorites="));
+
+    let favorites = [];
+
+    if (favoritesCookie) {
+      favorites = favoritesCookie.split("=")[1].split(",");
+    }
+
+    if (isFavorite) {
+      favorites = favorites.filter((id) => id !== listingId);
+      await fetch(`/api/favorites/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, listingId }),
+      });
+    } else {
+      favorites.push(listingId);
+      await fetch(`/api/favorites/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, listingId }),
+      });
+    }
+
+    document.cookie = `favorites=${favorites.join(",")}; path=/`;
+    setIsFavorite(!isFavorite);
+  };
+
 
   return (
     <main>
@@ -90,6 +141,9 @@ export default function Listing() {
             </p>
           )}
           <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
+            <div className='flex flex-row justify-between'>
+
+            
             <p className='text-2xl font-semibold'>
               {listing.name} - ${' '}
               {listing.offer
@@ -97,6 +151,14 @@ export default function Listing() {
                 : listing.regularPrice.toLocaleString('en-US')}
               {listing.type === 'rent' && ' / month'}
             </p>
+            <button type='button' onClick={handleFavoriteClick}>
+              <GrFavorite
+                className={`truncate text-lg font-semibold cursor-pointer ${
+                  isFavorite ? 'text-red-500' : 'text-slate-700 '
+                }`}
+              />
+            </button>
+            </div>
             <p className='flex items-center mt-6 gap-2 text-slate-600  text-sm'>
               <FaMapMarkerAlt className='text-green-700' />
               {listing.address}

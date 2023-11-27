@@ -14,11 +14,11 @@ export default function Search() {
     order: 'desc',
   });
 
-  console.log("sidebardata: ", sidebardata)
+  // console.log("sidebardata: ", sidebardata)
 
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
-  console.log("listings: ", listings)
+  // console.log("listings: ", listings)
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {

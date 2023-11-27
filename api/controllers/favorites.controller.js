@@ -44,9 +44,9 @@ export const getFavorites = async (req, res, next) => {
 
   try {
     const favorites = await Favorites.find({ userId });
-    console.log("favorites", favorites);
+    // console.log("favorites", favorites);
     const listingIds = favorites.map((f) => f.listingId);
-    console.log("listingIds", listingIds);
+    // console.log("listingIds", listingIds);
     res.status(200).json({ listings: listingIds });
     // res.status(200).json(favorites)
   } catch (error) {

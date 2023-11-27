@@ -4,15 +4,16 @@ import { GrFavorite } from "react-icons/gr";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-
 export default function ListingItem({ listing, handleRemoveFavorite }) {
   const [isFavorite, setIsFavorite] = useState(false);
-  console.log("isFavorite", isFavorite)
+  console.log("isFavorite", isFavorite);
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
 
   useEffect(() => {
-    const favoritesCookie = document.cookie.split("; ").find((row) => row.startsWith("favorites="));
+    const favoritesCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("favorites="));
     // console.log("favoritesCookie", favoritesCookie)
     if (favoritesCookie) {
       const favorites = favoritesCookie.split("=")[1].split(",");
@@ -23,7 +24,9 @@ export default function ListingItem({ listing, handleRemoveFavorite }) {
 
   const handleFavoriteClick = async () => {
     const listingId = listing._id;
-    const favoritesCookie = document.cookie.split("; ").find((row) => row.startsWith("favorites="));
+    const favoritesCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("favorites="));
 
     let favorites = [];
 
@@ -40,6 +43,11 @@ export default function ListingItem({ listing, handleRemoveFavorite }) {
         },
         body: JSON.stringify({ userId, listingId }),
       });
+
+      // If handleRemoveFavorite is provided, call it to remove the listing immediately.
+      if (handleRemoveFavorite) {
+        handleRemoveFavorite(listingId);
+      }
     } else {
       favorites.push(listingId);
       await fetch(`/api/favorites/add`, {
@@ -53,11 +61,6 @@ export default function ListingItem({ listing, handleRemoveFavorite }) {
 
     document.cookie = `favorites=${favorites.join(",")}; path=/`;
     setIsFavorite(!isFavorite);
-
-    // If handleRemoveFavorite is provided, call it to remove the listing immediately.
-    if (handleRemoveFavorite) {
-      handleRemoveFavorite(listingId);
-    }
   };
 
   return (

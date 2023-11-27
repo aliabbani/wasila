@@ -18,6 +18,11 @@ const Favorites = ({ listing }) => {
   };
 
   const handleRemoveFavorite = async (listingId) => {
+    // Update local state to reflect the removed listing
+    setUserFavoriteListings((prevListings) =>
+      prevListings.filter((listing) => listing._id !== listingId)
+    );
+
     try {
       await fetch(`/api/favorites/delete`, {
         method: "DELETE",
@@ -27,10 +32,6 @@ const Favorites = ({ listing }) => {
         body: JSON.stringify({ userId, listingId }),
       });
 
-      // Update local state to reflect the removed listing
-      setUserFavoriteListings((prevListings) =>
-        prevListings.filter((listing) => listing._id !== listingId)
-      );
     } catch (error) {
       console.error("Error removing favorite:", error);
     }
